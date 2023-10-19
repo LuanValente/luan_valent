@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .container {
+            border: 1px solid #ccc;
+            padding: 20px;
+            margin: 10px;
+            border-radius: 5px;
+            background-color: #f0f0f0;
+        }
+
+        .roda-teto {
+            background-color: #0074D9;
+            color: #fff;
+            padding: 10px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            justify-content: flex-start; /* Alinha o conteúdo à esquerda */
+        }
+
+        .roda-teto h2 {
+            font-size: 18px; /* Tamanho da fonte menor */
+            margin: 0; /* Remove a margem padrão do h2 */
+        }
+                /* Estilo para o título do formulário */
+                .titulo-formulario {
+            color: #000000;
+            padding: 10px;
+            text-align: center;
+        }
+        .campo {
+            margin-top: 20px; /* Espaço entre o "Roda Teto" e os campos */
+        }
+        .circle-icon {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: #8a2be2; /* Cor roxa clara */
+            color: white;
+            cursor: pointer;
+        }
+        .circle-icon-red {
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: red; /* Cor vermelha */
+            color: white;
+            cursor: pointer;
+        }
+        .formulario {
+            flex: 1; /* Ocupa o espaço restante no contêiner */
+            margin-left: 20px; /* Espaço entre os ícones e o formulário */
+        }
+        .container {
+            margin-left: 60px; /* Ajusta o espaço para acomodar os ícones à esquerda */
+        }
+        .produto-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .produto-icons {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 10px; /* Ajuste o espaçamento conforme necessário */
+    }
+    .product-label {
+        font-weight: bold;
+        margin-top: 8px;
+    }
+    .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal img {
+    max-width: 80%;
+    max-height: 80%;
+}
+    </style>
+</head>
+    <title>Formulario De Produtos/Clientes</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+</head>
+<body>
+    <div class="titulo-formulario">
+        <h1>CADASTRO DE FORNECEDOR/PRODUTO</h1>
+    </div>
+    <div class="container">
+        <div class="roda-teto">
+            <h2>Dados do Fornecedor</h2>
+        </div>
+        <div class="form-row">
+            <div class="col-md-8 campo">
+                <label for="RazaoSocial">Razão Social</label>
+                <input type="text" class="form-control" id="RazaoSocial" required>
+            </div>
+            <div class="col-md-4 campo">
+                <label for="cnpj">CNPJ</label>
+                <input type="text" class="form-control" id="cnpj" style="width: 100%;" placeholder="00.000.000/0000-00" oninput="formatarCNPJ(this)"  maxlength="18" required>
+            </div>
+        </div>
+    
+        <div class="form-row">
+            <div class="col-md-8 campo">
+                <label for="NomeFantasia">Nome Fantasia</label>
+                <input type="text" class="form-control" id="NomeFantasia" required>
+            </div>
+            <div class="col-md-4 campo">
+                <label for="InscricaoEstadual">Inscrição Estadual</label>
+                <input type="text" class="form-control" id="InscricaoEstadual" style="width: 100%;">
+            </div>
+        </div>
+    
+        <div class="form-row">
+            <div class="col-md-8 campo">
+                <label for="CEP">CEP</label>
+                <input type="text" class="form-control" id="CEP" style="width: 60%;" required onblur="buscarEnderecoPorCEP()">
+            </div>
+            <div class="col-md-4 campo">
+                <label for="InscricaoMunicipal">Inscrição Municipal</label>
+                <input type="text" class="form-control" id="InscricaoMunicipal" style="width: 100%;">
+            </div>
+        </div>
+    
+        <div class="form-row">
+            <div class="col-md-8 campo">
+                <label for="Endereco">Endereço :</label>
+                <input type="text" class="form-control" id="Endereco" required>
+            </div>
+            <div class="col-md-4 campo">
+                <label for="Numero">Número</label>
+                <input type="text" class="form-control" id="Numero" style="width: 100%;" required>
+            </div>
+        </div>
+    
+        <div class="campo">
+            <label for="Complemento">Complemento</label>
+            <input type="text" class="form-control" id="Complemento" style="width: 100%;">
+        </div>
+    
+        <div class="form-row">
+            <div class="col-md-4 campo">
+                <label for="Bairro">Bairro</label>
+                <input type="text" class="form-control" id="Bairro" required>
+            </div>
+            <div class="col-md-4 campo">
+                <label for="Municipio">Município</label>
+                <input type="text" class="form-control" id="Municipio" style="width: 100%;" required>
+            </div>
+            <div class="col-md-4 campo">
+                <label for="Estado">Estado</label>
+                <input type="text" class="form-control" id="Estado" style="width: 100%;" required>
+            </div>
+        </div>
+    
+        <div class="form-row">
+            <div class="col-md-6 campo">
+                <label for="NomeDaPessoaDeCadastro">Nome Da Pessoa De Contato</label>
+                <input type="text" class="form-control" id="NomeDaPessoaDeCadastro" required>
+            </div>
+            <div class="col-md-3 campo">
+                <label for="Telefone">Telefone</label>
+                <input type="text" class="form-control" id="Telefone" style="width: 100%;" required>
+            </div>
+            <div class="col-md-3 campo">
+                <label for="E-mail">E-mail</label>
+                <input type="text" class="form-control" id="E-mail" style="width: 100%;" required>
+            </div>
+        </div>
+    </div>
+    
+    <body>
+
+    
+        <div class="container">
+            <div class="formulario">
+                <h2>Produtos</h2>
+                <div id="produtosContainer">
+                    <!-- Os campos de produtos adicionados dinamicamente aparecerão aqui -->
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <button class="btn btn-primary" onclick="adicionarProduto()" style="background-color: green; padding: 10px 500px; font-size: 16px;">Adicionar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+
+        
+        <script>
+            let produtoCounter = 0;
+        
+            function calcularValorTotal(produtoCounter) {
+                const quantidadeEstoque = document.getElementById(`QuantidadeEstoque${produtoCounter}`).value;
+                const valorUnitario = document.getElementById(`ValorUnitario${produtoCounter}`).value;
+                if (quantidadeEstoque && valorUnitario) {
+                    const valorTotal = parseFloat(quantidadeEstoque) * parseFloat(valorUnitario);
+                    document.getElementById(`ValorTotal${produtoCounter}`).value = valorTotal.toFixed(2);
+                } else {
+                    document.getElementById(`ValorTotal${produtoCounter}`).value = '';
+                }
+            }
+
+            function reorganizarNumeracaoProdutos() {
+    const produtos = document.getElementsByClassName('produto-container');
+    for (let i = 0; i < produtos.length; i++) {
+        const inputProduto = produtos[i].querySelector(`#Produto${i + 1}`);
+        inputProduto.placeholder = `Produto ${i + 1}`;
+    }
+    produtoCounter = produtos.length;
+}
+
+function removerProduto(produtoCounter) {
+    const produtosContainer = document.getElementById('produtosContainer');
+    const produtoASerRemovido = document.getElementById(`produtoContainer${produtoCounter}`);
+    produtosContainer.removeChild(produtoASerRemovido);
+    reorganizarNumeracaoProdutos();
+}
+            function adicionarProduto() {
+                produtoCounter++;
+
+                const novoProdutoContainer = document.createElement('div');
+                novoProdutoContainer.className = 'container produto-container';
+                novoProdutoContainer.id = `produtoContainer${produtoCounter}`;
+                novoProdutoContainer.innerHTML = `
+                    <div class="produto-icons">
+                        <div class="circle-icon-red" onclick="removerProduto(${produtoCounter})">
+                            <i class="fas fa-trash-alt" style="font-size: 34px;"></i>
+                        </div>
+                        <div class="circle-icon" style="background-color: #8a2be2;" title="Caixa de Entrega">
+                            <i class="fas fa-box" style="font-size: 34px;"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-20 campo">
+                            <label class="product-label" for="Produto${produtoCounter}">Produto ${produtoCounter}</label>
+                            <input type="text" class="form-control" id="Produto${produtoCounter}" placeholder="Produto ${produtoCounter}">
+                        </div>
+                    <div class="form-group row">
+                        <div class="col-md-3 campo">
+                            <label for="UnidadeMedida${produtoCounter}">UND.Medida</label>
+                            <select class="form-control" id="UnidadeMedida${produtoCounter}">
+                                <option value="Unidade">Unidade</option>
+                                <option value="Kilograma">Kilograma</option>
+                                <option value="Litro">Litro</option>
+                                <!-- Adicione outras opções de unidade de medida aqui -->
+                            </select>
+                        </div>
+                        <div class="col-md-3 campo">
+                            <label for="QuantidadeEstoque${produtoCounter}">QTDE. Estoque</label>
+                            <input type="text" class="form-control" id="QuantidadeEstoque${produtoCounter}" placeholder="Quantidade" oninput="calcularValorTotal(${produtoCounter})">
+                        </div>
+                        <div class="col-md-3 campo">
+                            <label for "ValorUnitario${produtoCounter}">Valor Unitário</label>
+                            <input type="text" class="form-control" id="ValorUnitario${produtoCounter}" placeholder="Valor Unitário" oninput="calcularValorTotal(${produtoCounter})">
+                        </div>
+                        <div class="col-md-3 campo">
+                            <label for="ValorTotal${produtoCounter}">Valor Total</label>
+                            <input type="text" class="form-control" id="ValorTotal${produtoCounter}" readonly>
+                        </div>
+                    </div>
+                `;
+        
+                const produtosContainer = document.getElementById('produtosContainer');
+                produtosContainer.appendChild(novoProdutoContainer);
+                reorganizarNumeracaoProdutos();
+}
+        </script>
+<div class="container">
+    <div class="roda-teto">
+        <h2 style="margin-bottom: 10px;">Anexos</h2>
+    </div>
+    <div id="anexosContainer">
+        <!-- Os campos de anexos adicionados dinamicamente aparecerão aqui -->
+    </div>
+    <div class="form-group" style="display: flex; align-items: center;">
+        <label for="anexoInput" class="btn btn-success" style="flex: 1;">
+            <i class="fa fa-paperclip" style="margin-right: 10px;"></i>
+            Anexar Documento
+            <input type="file" class="form-control-file" id="anexoInput" style="display: none;" onchange="incluirAnexo()">
+        </label>
+    </div>
+</div>
+<script>
+    let anexoCounter = 0;
+    let anexos = [];
+
+    // Função para salvar os anexos na sessionStorage
+    function salvarAnexosNaSessionStorage() {
+        sessionStorage.setItem('anexos', JSON.stringify(anexos));
+    }
+
+    // Função para carregar os anexos da sessionStorage (chamada ao iniciar a página)
+    function carregarAnexosDaSessionStorage() {
+        const anexosSalvos = sessionStorage.getItem('anexos');
+        if (anexosSalvos) {
+            anexos = JSON.parse(anexosSalvos);
+            // Atualize a interface do usuário para exibir os anexos carregados da sessionStorage, se necessário.
+        }
+    }
+
+    // Adicione a chamada para carregar os anexos da sessionStorage ao iniciar a página
+    carregarAnexosDaSessionStorage();
+
+    function excluirAnexo(anexoCounter) {
+        const anexosContainer = document.getElementById('anexosContainer');
+        const anexoASerExcluido = document.getElementById(`anexoContainer${anexoCounter}`);
+        anexosContainer.removeChild(anexoASerExcluido);
+        anexos = anexos.filter(anexo => anexo.indice !== anexoCounter);
+        salvarAnexosNaSessionStorage(); // Após excluir um anexo, salve a nova lista na sessionStorage.
+    }
+
+    function incluirAnexo() {
+    const anexoInput = document.getElementById('anexoInput').files[0];
+
+    if (anexoInput) {
+        anexoCounter++;
+        const novoAnexo = {
+            indice: anexoCounter,
+            blobArquivo: anexoInput, // Armazene diretamente o Blob
+            nomeArquivo: anexoInput.name,
+            type: anexoInput.type, // Armazene o tipo MIME do arquivo
+        };
+        anexos.push(novoAnexo);
+
+        const novoAnexoContainer = document.createElement('div');
+        novoAnexoContainer.className = 'container anexo-container';
+        novoAnexoContainer.id = `anexoContainer${anexoCounter}`;
+        novoAnexoContainer.innerHTML = `
+            <div class="form-group">
+                <i class="fa fa-trash fa-2x" onclick="excluirAnexo(${anexoCounter})" style="cursor: pointer; color: red;"></i>
+                <i class="fa fa-eye fa-2x" onclick="visualizarAnexo(${anexoCounter})" style="cursor: pointer; color: blue;"></i>
+                <label>Anexo ${anexoCounter}: ${anexoInput.name}</label>
+            </div>
+        `;
+
+        const anexosContainer = document.getElementById('anexosContainer');
+        anexosContainer.appendChild(novoAnexoContainer);
+        salvarAnexosNaSessionStorage(); // Após adicionar um anexo, salve a nova lista na sessionStorage.
+    }
+}
+
+    function visualizarAnexo(anexoIndex) {
+    const anexo = anexos.find(anexo => anexo.indice === anexoIndex);
+    if (anexo && anexo.blobArquivo) { // Verifica se o anexo e o blob estão definidos
+        const modal = document.createElement('div');
+        modal.className = 'modal';
+        modal.style.position = 'fixed';
+        modal.style.top = '0';
+        modal.style.left = '0';
+        modal.style.width = '100%';
+        modal.style.height = '100%';
+        modal.style.backgroundColor = 'rgba(0,0,0,0.7)';
+        modal.style.display = 'flex';
+        modal.style.justifyContent = 'center';
+        modal.style.alignItems = 'center';
+
+        if (anexo.blobArquivo.type.startsWith('image/')) {
+            const img = document.createElement('img');
+            img.src = URL.createObjectURL(anexo.blobArquivo);
+            img.style.maxWidth = '80%';
+            img.style.maxHeight = '80%';
+            modal.appendChild(img);
+        } else if (anexo.blobArquivo.type === 'application/pdf') {
+            const iframe = document.createElement('iframe');
+            iframe.src = URL.createObjectURL(anexo.blobArquivo);
+            iframe.style.maxWidth = '80%';
+            iframe.style.maxHeight = '80%';
+            modal.appendChild(iframe);
+        } else if (anexo.blobArquivo.type.startsWith('video/')) {
+            const video = document.createElement('video');
+            video.src = URL.createObjectURL(anexo.blobArquivo);
+            video.controls = true;
+            video.style.maxWidth = '80%';
+            video.style.maxHeight = '80%';
+            modal.appendChild(video);
+        } else {
+            // Se não for um dos tipos suportados, exibe uma mensagem de erro
+            modal.textContent = `Tipo de arquivo não suportado: ${anexo.blobArquivo.type}`;
+        }
+
+        document.body.appendChild(modal);
+
+        modal.addEventListener('click', function() {
+            document.body.removeChild(modal);
+        });
+    }
+}
+</script>
+<div class="container">
+    <!-- Resto do seu conteúdo aqui -->
+    <div class="text-center"> <!-- Centralizar o botão -->
+        <button class="btn btn-success btn-lg" onclick="salvarFornecedor()"> <!-- Estilo verde e esticado (large) -->
+            Salvar Fornecedor
+        </button>
+    </div>
+</div>
+
+<script>
+
+function salvarFornecedor() {
+    const fornecedor = {
+        razaoSocial: document.getElementById('RazaoSocial').value,
+        nomeFantasia: document.getElementById('NomeFantasia').value,
+        cnpj: document.getElementById('cnpj').value,
+        inscricaoEstadual: document.getElementById('InscricaoEstadual').value,
+        inscricaoMunicipal: document.getElementById('InscricaoMunicipal').value,
+        nomeContato: document.getElementById('NomeDaPessoaDeCadastro').value,
+        telefoneContato: document.getElementById('Telefone').value,
+        emailContato: document.getElementById('E-mail').value,
+        produtos: [],
+        anexos: [],
+    };
+
+    for (let i = 1; i <= produtoCounter; i++) {
+        fornecedor.produtos.push({
+            indice: i,
+            descricaoProduto: document.getElementById(`Produto${i}`).value,
+            unidadeMedida: document.getElementById(`UnidadeMedida${i}`).value,
+            qtdeEstoque: document.getElementById(`QuantidadeEstoque${i}`).value,
+            valorUnitario: document.getElementById(`ValorUnitario${i}`).value,
+            valorTotal: document.getElementById(`ValorTotal${i}`).value,
+        });
+    }
+
+    for (let i = 1; i <= anexoCounter; i++) {
+        const anexo = anexos.find(a => a.indice === i);
+        if (anexo) {
+            fornecedor.anexos.push({
+                indice: i,
+                nomeArquivo: anexo.nomeArquivo,
+                blobArquivo: anexo.blobArquivo,
+            });
+        }
+    }
+
+    const jsonFornecedor = JSON.stringify(fornecedor, null, 2);
+
+    // Cria um objeto Blob contendo o JSON
+    const blob = new Blob([jsonFornecedor], { type: 'application/json' });
+
+    // Cria uma URL para o Blob
+    const url = URL.createObjectURL(blob);
+
+    // Cria um link para fazer o download do JSON
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'fornecedor.json'; // Nome do arquivo a ser baixado
+    a.style.display = 'none';
+
+    // Adiciona o link ao corpo do documento e clica nele para iniciar o download
+    document.body.appendChild(a);
+    a.click();
+
+    // Remove o link do corpo do documento
+    document.body.removeChild(a);
+
+    // Revoga a URL do Blob para liberar recursos
+    URL.revokeObjectURL(url);
+}
+</script>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+    <script>
+    function formatarCNPJ(input) {
+        input.value = input.value.replace(/\D/g, '') // Remove caracteres não numéricos
+            .replace(/(\d{2})(\d)/, '$1.$2') // Coloca ponto depois dos primeiros 2 dígitos
+            .replace(/(\d{3})(\d)/, '$1.$2') // Coloca ponto depois dos próximos 3 dígitos
+            .replace(/(\d{3})(\d)/, '$1/$2') // Coloca barra depois dos próximos 3 dígitos
+            .replace(/(\d{4})(\d{1,2})/, '$1-$2'); // Coloca hífen antes dos últimos 2 dígitos
+    }
+    </script>
+<script>
+    // Função para buscar o endereço pelo CEP
+    function buscarEnderecoPorCEP() {
+        const cep = document.getElementById('CEP').value;
+        if (cep.length === 8) {
+            // Limpe os campos de endereço
+            document.getElementById('Endereco').value = '';
+            document.getElementById('Bairro').value = '';
+            document.getElementById('Municipio').value = '';
+            document.getElementById('Estado').value = '';
+
+            // Faça uma solicitação à API do ViaCEP
+            fetch(`https://viacep.com.br/ws/${cep}/json/`)
+                .then(response => response.json())
+                .then(data => {
+                    // Preencha os campos de endereço com os dados da API
+                    document.getElementById('Endereco').value = data.logradouro;
+                    document.getElementById('Bairro').value = data.bairro;
+                    document.getElementById('Municipio').value = data.localidade;
+                    document.getElementById('Estado').value = data.uf;
+                })
+                .catch(error => {
+                    console.log('Erro ao buscar o CEP: ', error);
+                });
+        }
+    }
+</script>
+</body>
+</html>
